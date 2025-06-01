@@ -1,7 +1,9 @@
 package world.novium.creative.modules.general.commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.triumphteam.gui.guis.Gui;
 import world.novium.creative.base.Command;
+import world.novium.creative.modules.general.gui.PanelGUI;
 
 public class PanelCommand implements Command {
     @Override
@@ -9,9 +11,9 @@ public class PanelCommand implements Command {
         return new CommandAPICommand("panel")
                 .withPermission("novium.panel")
                 .executesPlayer((player, args) -> {
-                    // Logic to open the panel for the player
-                    player.sendMessage("Opening panel...");
-                    // Here you would typically open a GUI or perform some action
+                    Gui gui = PanelGUI.buildGUI(player);
+
+                    gui.open(player);
                 });
     }
 }

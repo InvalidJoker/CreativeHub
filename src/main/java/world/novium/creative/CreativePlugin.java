@@ -2,6 +2,7 @@ package world.novium.creative;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.triumphteam.gui.TriumphGui;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import world.novium.creative.base.Module;
@@ -18,6 +19,10 @@ public class CreativePlugin extends JavaPlugin {
             new WorldModule()
     );
 
+    public static CreativePlugin getInstance() {
+        return instance;
+    }
+
     @Override
     public void onLoad() {
         instance = this;
@@ -28,8 +33,10 @@ public class CreativePlugin extends JavaPlugin {
     public void onEnable() {
         CommandAPI.onEnable();
 
+        TriumphGui.init(this);
+
         // Register modules
-        modules.forEach(module -> {;
+        modules.forEach(module -> {
             module.enable();
             getLogger().info("Module " + module.getClass().getSimpleName() + " has been enabled.");
         });
@@ -50,9 +57,5 @@ public class CreativePlugin extends JavaPlugin {
         });
         // Plugin shutdown logic
         getLogger().info("CreativePlugin has been disabled!");
-    }
-
-    public static CreativePlugin getInstance() {
-        return instance;
     }
 }
