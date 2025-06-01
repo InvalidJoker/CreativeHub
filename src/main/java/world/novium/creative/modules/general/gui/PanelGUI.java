@@ -72,9 +72,8 @@ public class PanelGUI {
                     PlotManager plotManager = PlotManager.getInstance();
 
                     if (plotManager.getPlots(player).isEmpty()) {
-                        plotManager.claimRandomPlot(player).ifPresent(plot -> {
-                            player.sendMessage(MessageUtils.parse("<green>Grundstück erfolgreich erstellt!"));
-                        });
+                        player.performCommand("p auto");
+                        player.sendMessage(MessageUtils.parse("<green>Grundstück erfolgreich erstellt!"));
                     } else {
                         player.sendMessage(MessageUtils.parse("<red>Du hast bereits ein Grundstück!"));
                     }

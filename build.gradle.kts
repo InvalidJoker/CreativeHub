@@ -69,4 +69,10 @@ paper {
     main = "world.novium.creative.CreativePlugin"
     apiVersion = "1.19"
     authors = listOf("InvalidJoker")
+
+    serverDependencies {
+        register("PlotSquared") {
+            required = true
+        }
+    }
 }

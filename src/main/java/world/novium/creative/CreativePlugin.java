@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import world.novium.creative.base.Module;
 import world.novium.creative.modules.general.GeneralModule;
+import world.novium.creative.modules.world.PlotManager;
 import world.novium.creative.modules.world.WorldModule;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class CreativePlugin extends JavaPlugin {
         CommandAPI.onEnable();
 
         TriumphGui.init(this);
+
+        new PlotManager();
 
         // Register modules
         modules.forEach(module -> {
