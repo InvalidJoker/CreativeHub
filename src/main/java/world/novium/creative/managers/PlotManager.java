@@ -1,4 +1,4 @@
-package world.novium.creative.modules.world;
+package world.novium.creative.managers;
 
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.player.PlotPlayer;

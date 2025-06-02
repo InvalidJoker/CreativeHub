@@ -1,12 +1,12 @@
-package world.novium.creative.modules.general.gui;
+package world.novium.creative.gui;
 
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import world.novium.creative.modules.world.PlotManager;
-import world.novium.creative.modules.world.WorldManager;
+import world.novium.creative.managers.PlotManager;
+import world.novium.creative.managers.WorldManager;
 import world.novium.creative.utils.MessageUtils;
 
 public class PanelGUI {
@@ -116,9 +116,7 @@ public class PanelGUI {
         gui.setItem(2, 6, deletePlot);
         gui.setItem(1, 1, ItemBuilder.from(Material.BARRIER)
                 .name(MessageUtils.parse("<red>Schließen"))
-                .asGuiItem(event -> {
-                    gui.close(player);
-                }));
+                .asGuiItem(event -> gui.close(player)));
 
         return gui;
     }

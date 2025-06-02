@@ -1,0 +1,4 @@
+backend:
+  enabled: false
+  port: 8080
+  authToken: "your-auth-token"

@@ -1,10 +1,10 @@
-package world.novium.creative.modules.world.listeners;
+package world.novium.creative.listeners;
 
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import world.novium.creative.modules.world.WorldManager;
+import world.novium.creative.managers.WorldManager;
 
 public class WorldListeners implements Listener {
 

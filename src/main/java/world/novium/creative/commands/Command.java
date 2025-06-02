@@ -1,6 +1,6 @@
-package world.novium.creative.base;
+package world.novium.creative.commands;
 
-import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandTree;
 
 /**
  * Represents a wrapper for a CommandAPICommand-based command.
@@ -11,5 +11,5 @@ public interface Command {
      *
      * @return the constructed CommandAPICommand
      */
-    CommandAPICommand build();
+    CommandTree  build();
 }

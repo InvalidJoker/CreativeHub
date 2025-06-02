@@ -1,4 +1,4 @@
-package world.novium.creative.modules.world;
+package world.novium.creative.managers;
 
 
 import org.bukkit.Bukkit;
@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import world.novium.creative.CreativePlugin;
+import world.novium.creative.utils.FlatWorldGenerator;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class WorldManager {
 
@@ -27,12 +29,17 @@ public class WorldManager {
         return "world_" + player.getUniqueId();
     }
 
+    public static File getWorldFolder(UUID uuid) {
+        String worldName = "world_" + uuid;
+        return Bukkit.getWorldContainer().toPath().resolve(worldName).toFile();
+    }
+
     public static void createWorld(Player player) {
         String name = getWorldName(player);
 
         if (worldExists(name)) return;
 
-        World world = Bukkit.createWorld(new WorldCreator(name));
+        World world = Bukkit.createWorld(new WorldCreator(name).generator(new FlatWorldGenerator()));
         if (world != null) {
             loadedWorlds.put(name, world);
         }

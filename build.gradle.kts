@@ -27,7 +27,8 @@ repositories {
 
 val shadowDependencies = listOf(
     "dev.jorel:commandapi-bukkit-shade-mojang-mapped:$commandAPIVersion",
-    "dev.triumphteam:triumph-gui:3.1.11"
+    "dev.triumphteam:triumph-gui:3.1.11",
+    "io.javalin:javalin:6.6.0"
 )
 
 dependencies {
