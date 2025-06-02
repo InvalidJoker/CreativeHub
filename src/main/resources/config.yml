@@ -2,3 +2,7 @@ backend:
   enabled: false
   port: 8080
   authToken: "your-auth-token"
+database:
+  enabled: true
+  uri: "mongodb://localhost:27017"
+  database: "yourdb"

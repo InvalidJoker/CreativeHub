@@ -31,6 +31,8 @@ public class PanelGUI {
 
                     WorldManager.createWorld(player);
                     player.sendMessage(MessageUtils.parse("<green>Welt erfolgreich erstellt!"));
+
+                    player.teleport(WorldManager.getLoadedWorld(player).getSpawnLocation());
                 });
 
         GuiItem tpWorld = ItemBuilder.from(Material.ENDER_PEARL)

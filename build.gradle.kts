@@ -3,7 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id("java")
     id("de.eldoria.plugin-yml.paper") version "0.7.1"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
     id("com.gradleup.shadow") version "8.3.6"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
@@ -28,7 +28,9 @@ repositories {
 val shadowDependencies = listOf(
     "dev.jorel:commandapi-bukkit-shade-mojang-mapped:$commandAPIVersion",
     "dev.triumphteam:triumph-gui:3.1.11",
-    "io.javalin:javalin:6.6.0"
+    "io.javalin:javalin:6.6.0",
+    "dev.morphia.morphia:morphia-core:2.4.18",
+    "com.github.ben-manes.caffeine:caffeine:3.2.0"
 )
 
 dependencies {

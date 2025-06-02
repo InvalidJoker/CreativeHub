@@ -3,6 +3,7 @@ package world.novium.creative.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import world.novium.creative.CreativePlugin;
@@ -34,15 +35,26 @@ public class WorldManager {
         return Bukkit.getWorldContainer().toPath().resolve(worldName).toFile();
     }
 
+    public static void generateWorld(String name) {
+        World world = Bukkit.createWorld(new WorldCreator(name)
+                .generator(new FlatWorldGenerator()));
+
+        if (world != null) {
+            WorldBorder worldBorder = world.getWorldBorder();
+
+            worldBorder.setCenter(0, 0);
+            worldBorder.setSize(512);
+
+            loadedWorlds.put(name, world);
+        }
+    }
+
     public static void createWorld(Player player) {
         String name = getWorldName(player);
 
         if (worldExists(name)) return;
 
-        World world = Bukkit.createWorld(new WorldCreator(name).generator(new FlatWorldGenerator()));
-        if (world != null) {
-            loadedWorlds.put(name, world);
-        }
+        generateWorld(name);
     }
 
     public static void loadWorld(Player player) {
@@ -54,10 +66,8 @@ public class WorldManager {
         }
         if (!worldExists(name)) return;
 
-        World world = Bukkit.createWorld(new WorldCreator(name));
-        if (world != null) {
-            loadedWorlds.put(name, world);
-        }
+
+        generateWorld(name);
     }
 
     public static void unloadWorld(Player player, boolean save) {

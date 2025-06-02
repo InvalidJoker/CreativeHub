@@ -3,12 +3,17 @@ package world.novium.creative;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.triumphteam.gui.TriumphGui;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.novium.creative.backend.BackendServer;
 import world.novium.creative.commands.Command;
 import world.novium.creative.commands.impl.PanelCommand;
 import world.novium.creative.commands.impl.WarpCommand;
 import world.novium.creative.commands.impl.WarpsCommand;
+import world.novium.creative.database.Database;
+import world.novium.creative.database.UserCache;
+import world.novium.creative.listeners.PlayerListeners;
+import world.novium.creative.listeners.WorldListeners;
 import world.novium.creative.managers.WarpManager;
 
 import java.util.List;
@@ -40,6 +45,20 @@ public class CreativePlugin extends JavaPlugin {
 
         WarpManager warpManager = new WarpManager(this);
 
+        var databaseConfig = getConfig().getConfigurationSection("database");
+
+        if (databaseConfig == null || !databaseConfig.getBoolean("enabled", false)) {
+            getLogger().severe("Database is not enabled in the config. Please enable it to use the plugin.");
+            return;
+        }
+
+        Database database = new Database();
+
+        database.connect(databaseConfig);
+
+        UserCache.init(Database.getDatastore());
+
+        registerListener();
         registerCommands(warpManager);
 
         var backendConfig = getConfig().getConfigurationSection("backend");
@@ -92,5 +111,14 @@ public class CreativePlugin extends JavaPlugin {
         );
 
         commands.forEach(command -> command.build().register());
+    }
+
+    public void registerListener() {
+        List<Listener> listeners = List.of(
+                new WorldListeners(),
+                new PlayerListeners()
+        );
+
+        listeners.forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 }
