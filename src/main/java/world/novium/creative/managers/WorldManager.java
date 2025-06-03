@@ -10,6 +10,8 @@ import world.novium.creative.CreativePlugin;
 import world.novium.creative.utils.FlatWorldGenerator;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,10 +19,94 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class WorldManager {
 
     private static final Map<String, World> loadedWorlds = new HashMap<>();
+    private static final File SNAPSHOT_DIR = Bukkit.getWorldContainer().toPath().resolve("snapshots").toFile();
+
+    public static boolean createSnapshot(UUID uuid, String snapshotName) {
+        File worldFolder = getWorldFolder(uuid);
+        File snapshotFolder = new File(SNAPSHOT_DIR, "world_" + uuid);
+        if (!snapshotFolder.exists() && !snapshotFolder.mkdirs()) return false;
+
+        File zipFile = new File(snapshotFolder, snapshotName + ".zip");
+
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
+            Path worldPath = worldFolder.toPath();
+            Files.walk(worldPath)
+                    .filter(path -> !Files.isDirectory(path))
+                    .forEach(path -> {
+                        ZipEntry entry = new ZipEntry(worldPath.relativize(path).toString());
+                        try {
+                            zos.putNextEntry(entry);
+                            Files.copy(path, zos);
+                            zos.closeEntry();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean loadSnapshot(UUID uuid, String snapshotName) {
+        File worldFolder = getWorldFolder(uuid);
+        File snapshotZip = new File(new File(SNAPSHOT_DIR, "world_" + uuid), snapshotName + ".zip");
+
+        if (!snapshotZip.exists()) return false;
+
+        String name = "world_" + uuid;
+        if (Bukkit.getWorld(name) != null) {
+            Bukkit.unloadWorld(name, false);
+        }
+
+        try {
+            deleteWorldDirectory(name);
+
+            try (ZipInputStream zis = new ZipInputStream(new FileInputStream(snapshotZip))) {
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    File newFile = new File(worldFolder, entry.getName());
+                    if (entry.isDirectory()) {
+                        newFile.mkdirs();
+                    } else {
+                        newFile.getParentFile().mkdirs();
+                        try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                            byte[] buffer = new byte[1024];
+                            int length;
+                            while ((length = zis.read(buffer)) > 0) {
+                                fos.write(buffer, 0, length);
+                            }
+                        }
+                    }
+                    zis.closeEntry();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static String[] listSnapshots(UUID uuid) {
+        File folder = new File(SNAPSHOT_DIR, "world_" + uuid);
+        if (!folder.exists()) return new String[0];
+
+        return folder.list((dir, name) -> name.endsWith(".zip"));
+    }
+
+    public static boolean deleteSnapshot(UUID uuid, String snapshotName) {
+        File snapshotFile = new File(new File(SNAPSHOT_DIR, "world_" + uuid), snapshotName + ".zip");
+        return snapshotFile.exists() && snapshotFile.delete();
+    }
 
     public static boolean worldExists(String name) {
         return Bukkit.getWorldContainer().toPath().resolve(name).toFile().exists();

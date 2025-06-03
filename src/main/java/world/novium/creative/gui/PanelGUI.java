@@ -65,6 +65,16 @@ public class PanelGUI {
                     }
                 });
 
+        GuiItem worldSnapshots = ItemBuilder.from(Material.DIAMOND_PICKAXE)
+                .name(MessageUtils.parse("<green>Welt-Snapshots"))
+                .lore(MessageUtils.parse(
+                        "<gray>Verwalte Snapshots deiner Welt, um verschiedene Bauphasen zu speichern."
+                ))
+                .asGuiItem(event -> {
+                    Gui snapshotsGui = SnapshotGUI.buildSnapshotGUI(player, 0);
+                    snapshotsGui.open(player);
+                });
+
         GuiItem createPlot = ItemBuilder.from(Material.GRASS_BLOCK)
                 .name(MessageUtils.parse("<green>Grundstück erstellen"))
                 .lore(MessageUtils.parse(
@@ -113,6 +123,7 @@ public class PanelGUI {
         gui.setItem(1, 4, createWorld);
         gui.setItem(1, 5, tpWorld);
         gui.setItem(1, 6, deleteWorld);
+        gui.setItem(1, 7, worldSnapshots);
         gui.setItem(2, 4, createPlot);
         gui.setItem(2, 5, tpPlot);
         gui.setItem(2, 6, deletePlot);
