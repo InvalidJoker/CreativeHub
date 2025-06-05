@@ -12,7 +12,6 @@ public class WorldListeners implements Listener {
     public void onWorldChange(PlayerChangedWorldEvent event) {
         World world = event.getFrom();
 
-        // get players on world
         int playerCount = world.getPlayers().size();
 
         if (playerCount == 0 && WorldManager.getLoadedWorld(world.getName()) != null) {

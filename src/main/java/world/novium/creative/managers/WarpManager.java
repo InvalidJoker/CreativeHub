@@ -1,6 +1,5 @@
 package world.novium.creative.managers;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
